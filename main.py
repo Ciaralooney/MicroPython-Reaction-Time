@@ -25,14 +25,14 @@ def rating(ms):
     if ms<200:return "WOW!"
     elif ms<300:return "Great!"
     elif ms<450:return "Good"
-    elif ms<600:return "Not bad"
-    else:return "Too slow"
+    elif ms<600:return "OK"
+    else:return "Slow"
 
 def play_round():
     delay_ms = MIN_DELAY+(time.ticks_ms()%(MAX_DELAY-MIN_DELAY))
-    show("Wait for it...")
+    show("Wait...")
     time.sleep_ms(delay_ms)
-    show(">> PRESS NOW!")
+    show("GO!")
     led.on()
     t_start = time.ticks_ms()
     pressed = False
@@ -45,19 +45,16 @@ def play_round():
     return time.ticks_diff(t_end, t_start)
 
 while True:
-    show("Reaction Timer", "Press USR!")
+    show("READY?", "USR->go")
     print("Press USR to start...")
     while not sw():time.sleep_ms(20)
     wait_for_release()
-    show("Get ready...", "    3")
-    time.sleep(1)
-    show("Get ready...", "    2")
-    time.sleep(1)
-    show("Get ready...", "    1")
-    time.sleep(1)
+    for n in ("3","2","1"):
+        show("", "    "+n)
+        time.sleep(1)
     result = play_round()
     if result is None:
-        show("Too slow!", "Try again")
+        show("TOO SLOW")
         print("Timed out.")
     else:
         r = rating(result)
